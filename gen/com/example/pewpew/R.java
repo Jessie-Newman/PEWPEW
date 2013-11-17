@@ -44,7 +44,7 @@ public final class R {
         public static final int ic_launcher=0x7f020014;
     }
     public static final class id {
-        public static final int action_settings=0x7f090014;
+        public static final int action_settings=0x7f090015;
         public static final int imageView1=0x7f090001;
         public static final int imageView10=0x7f09000b;
         public static final int imageView11=0x7f09000c;
@@ -65,6 +65,7 @@ public final class R {
         public static final int imageView9=0x7f09000a;
         public static final int main=0x7f090000;
         public static final int surfaceView1=0x7f090002;
+        public static final int textView1=0x7f090014;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

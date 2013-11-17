@@ -27,16 +27,19 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements PictureCallback, SurfaceHolder.Callback{
 	private MediaRecorder recorder;
 	private Timer timer;
 	
-	private static final int AMPLITUDE = 6000;
+	private static final int AMPLITUDE = 6500;
 	
 	private Camera camera;
 	static Bitmap bmp = null;
 	static boolean firing = false;
+	
+	static int score = 0;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +149,9 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     	Log.d("PEWPEWpixel", "HIT!!!!!!!!!");
     	
 		playAnimation();
+		score++;
+		TextView tv = (TextView)(findViewById(R.id.textView1));
+		tv.setText(""+score);
 
 		MediaPlayer mp = MediaPlayer.create(this, R.raw.explode);
         mp.setOnCompletionListener(new OnCompletionListener() {
