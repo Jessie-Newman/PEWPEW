@@ -1,5 +1,6 @@
 package com.example.pewpew;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,6 +12,9 @@ import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.MediaRecorder;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,15 +59,18 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     
     private class RecorderTask extends TimerTask {
         private MediaRecorder recorder;
+        private MainActivity mainact;
 
-        public RecorderTask(MediaRecorder recorder) {
+        public RecorderTask(MediaRecorder recorder, MainActivity mainact) {
             this.recorder = recorder;
+            this.mainact = mainact;
         }
 
         public void run() {
 //            Log.v("MicInfoService", "amplitude: " + recorder.getMaxAmplitude());
         	if (recorder.getMaxAmplitude() > AMPLITUDE) {
         		Log.v("MicInfoService", "PEW");
+        		mainact.fire();
         	}
         }
     }
@@ -93,16 +100,28 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     		e.printStackTrace();
     	}
     	recorder.start();
-    	timer.scheduleAtFixedRate(new RecorderTask(recorder), 0, 100);
+    	timer.scheduleAtFixedRate(new RecorderTask(recorder, this), 0, 100);
     	
     	camera = Camera.open();
     	SurfaceView sv = (SurfaceView)findViewById(R.id.surfaceView1);
     	sv.getHolder().addCallback(this);
     }
     
-    private void fire()
+    public void fire()
     {
     	camera.takePicture(null, null, null, this);
+    }
+    
+    private void hit()
+    {
+    	Log.d("PEWPEWpixel", "HIT!!!!!!!!!");
+    	try {
+			Uri notification = Uri.fromFile(new File(
+					"/system/media/audio/ui/sound_success.ogg"));
+			Ringtone r = RingtoneManager.getRingtone(
+					getApplicationContext(), notification);
+			r.play();
+		} catch (Exception e) {}
     }
     
     @Override
@@ -125,7 +144,8 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 				
 				if( (hsv[2] > 0.5) && ( (hsv[0] < 30) || (hsv[0] > 300) ) )
 				{
-					Log.d("PEWPEWpixel", "HIT!!!!!!!!!");
+					
+					hit();
 					Log.d("PEWPEWpixel", "X,Y = "+ x +","+ y + "\n" + hsv[0] + ", " + hsv[1] + ", " + hsv[2]);
 					found = true;
 					break;
@@ -134,6 +154,16 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 			if(found) break;
 		}
 		
+		if(!found)
+		{
+			try {
+				Uri notification = Uri.fromFile(new File(
+						"/system/media/audio/ui/sound_disallowed_action.ogg"));
+				Ringtone r = RingtoneManager.getRingtone(
+						getApplicationContext(), notification);
+				r.play();
+			} catch (Exception e) {}
+		}
 		Log.d("PEWPEWpixel", "done");
 		camera.startPreview();
 	}
@@ -152,12 +182,6 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     }
 
 	@Override
-	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		try {
 			camera.setPreviewDisplay(arg0);
@@ -169,8 +193,7 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 	}
 
 	@Override
-	public void surfaceDestroyed(SurfaceHolder arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
+	@Override
+	public void surfaceDestroyed(SurfaceHolder arg0) {}
 }
