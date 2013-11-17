@@ -23,11 +23,46 @@ public final class R {
     public static final class drawable {
         public static final int crosshair=0x7f020000;
         public static final int crosshair_white=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
+        public static final int explosion=0x7f020002;
+        public static final int explosion_0=0x7f020003;
+        public static final int explosion_1=0x7f020004;
+        public static final int explosion_10=0x7f020005;
+        public static final int explosion_11=0x7f020006;
+        public static final int explosion_12=0x7f020007;
+        public static final int explosion_13=0x7f020008;
+        public static final int explosion_14=0x7f020009;
+        public static final int explosion_15=0x7f02000a;
+        public static final int explosion_16=0x7f02000b;
+        public static final int explosion_2=0x7f02000c;
+        public static final int explosion_3=0x7f02000d;
+        public static final int explosion_4=0x7f02000e;
+        public static final int explosion_5=0x7f02000f;
+        public static final int explosion_6=0x7f020010;
+        public static final int explosion_7=0x7f020011;
+        public static final int explosion_8=0x7f020012;
+        public static final int explosion_9=0x7f020013;
+        public static final int ic_launcher=0x7f020014;
     }
     public static final class id {
-        public static final int action_settings=0x7f080003;
+        public static final int action_settings=0x7f080014;
         public static final int imageView1=0x7f080001;
+        public static final int imageView10=0x7f08000b;
+        public static final int imageView11=0x7f08000c;
+        public static final int imageView12=0x7f08000d;
+        public static final int imageView13=0x7f08000e;
+        public static final int imageView14=0x7f08000f;
+        public static final int imageView15=0x7f080010;
+        public static final int imageView16=0x7f080011;
+        public static final int imageView17=0x7f080012;
+        public static final int imageView18=0x7f080013;
+        public static final int imageView2=0x7f080003;
+        public static final int imageView3=0x7f080004;
+        public static final int imageView4=0x7f080005;
+        public static final int imageView5=0x7f080006;
+        public static final int imageView6=0x7f080007;
+        public static final int imageView7=0x7f080008;
+        public static final int imageView8=0x7f080009;
+        public static final int imageView9=0x7f08000a;
         public static final int main=0x7f080000;
         public static final int surfaceView1=0x7f080002;
     }

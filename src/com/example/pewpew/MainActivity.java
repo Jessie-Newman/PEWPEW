@@ -18,11 +18,14 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 public class MainActivity extends Activity implements PictureCallback, SurfaceHolder.Callback{
 	private MediaRecorder recorder;
@@ -33,6 +36,8 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 	private Camera camera;
 	static Bitmap bmp = null;
 	static boolean firing = false;
+	
+	private ImageView explosionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +48,31 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
         		| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_main);
-        findViewById(R.id.main).setBackgroundColor(Color.BLACK);
+        View mainView = findViewById(R.id.main);
+        mainView.setBackgroundColor(Color.BLACK);
 
         recorder = setupRecorder();
         timer = new Timer();
+        
+        // We'll just pretend the next 16 lines don't exist
+        findViewById(R.id.imageView2).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView3).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView4).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView5).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView6).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView7).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView8).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView9).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView10).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView11).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView12).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView13).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView14).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView15).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView16).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView17).setVisibility(View.INVISIBLE);
+        findViewById(R.id.imageView18).setVisibility(View.INVISIBLE);
+
     }
     
     private MediaRecorder setupRecorder() {
@@ -120,6 +146,8 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     {
     	Log.d("PEWPEWpixel", "HIT!!!!!!!!!");
     	try {
+			playAnimation();
+
 			Uri notification = Uri.fromFile(new File(
 					"/system/media/audio/ui/sound_success.ogg"));
 			Ringtone r = RingtoneManager.getRingtone(
@@ -213,4 +241,109 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {}
+	
+	/**
+	 * Warning. Reading this terrible code may ruin your life.
+	 */
+	private void playAnimation() {
+		final Handler handler = new Handler();
+
+		Runnable r = new Runnable() {
+	        @Override
+	        public void run() {
+	        	Log.d("explosion", "run");
+	        	if (findViewById(R.id.imageView2).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView2).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView3).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView3).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView3).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView4).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView4).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView4).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView5).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView5).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView5).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView6).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView6).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView6).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView7).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView7).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView7).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView8).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView8).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView8).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView9).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView9).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView9).setVisibility(View.INVISIBLE);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView10).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView10).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView11).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView11).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView11).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView12).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView12).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView12).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView13).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView13).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView13).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView14).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView14).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView14).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView15).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView15).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView15).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView16).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView16).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView16).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView17).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView17).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView17).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView18).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else if (findViewById(R.id.imageView18).getVisibility() == View.VISIBLE) {
+	        		findViewById(R.id.imageView18).setVisibility(View.INVISIBLE);
+	        		findViewById(R.id.imageView2).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+		   	    	return;
+	        	} else {
+	        		findViewById(R.id.imageView10).setVisibility(View.VISIBLE);
+		   	    	handler.postDelayed(this, 100);
+	        	}
+	        }
+		};
+	    
+	    handler.postDelayed(r, 100);
+	}
+	
+	
 }
