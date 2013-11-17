@@ -13,6 +13,8 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -25,7 +27,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 public class MainActivity extends Activity implements PictureCallback, SurfaceHolder.Callback{
 	private MediaRecorder recorder;
@@ -37,8 +38,6 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 	static Bitmap bmp = null;
 	static boolean firing = false;
 	
-	private ImageView explosionView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,15 +144,20 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     private void hit()
     {
     	Log.d("PEWPEWpixel", "HIT!!!!!!!!!");
-    	try {
-			playAnimation();
+    	
+		playAnimation();
 
-			Uri notification = Uri.fromFile(new File(
-					"/system/media/audio/ui/sound_success.ogg"));
-			Ringtone r = RingtoneManager.getRingtone(
-					getApplicationContext(), notification);
-			r.play();
-		} catch (Exception e) {}
+		MediaPlayer mp = MediaPlayer.create(this, R.raw.explode);
+        mp.setOnCompletionListener(new OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // TODO Auto-generated method stub
+                mp.release();
+            }
+
+        });   
+        mp.start();
     }
     
     @Override
@@ -201,11 +205,11 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 		if(!found)
 		{
 			try {
-				Uri notification = Uri.fromFile(new File(
-						"/system/media/audio/ui/sound_disallowed_action.ogg"));
-				Ringtone r = RingtoneManager.getRingtone(
-						getApplicationContext(), notification);
-				r.play();
+                Uri notification = Uri.fromFile(new File(
+                                "/system/media/audio/ui/sound_disallowed_action.ogg"));
+                Ringtone r = RingtoneManager.getRingtone(
+                                getApplicationContext(), notification);
+                r.play();
 			} catch (Exception e) {}
 		}
 		Log.d("PEWPEWpixel", "done");
