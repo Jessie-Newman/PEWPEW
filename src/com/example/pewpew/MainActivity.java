@@ -8,7 +8,9 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.MediaRecorder;
@@ -29,9 +31,8 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 	private static final int AMPLITUDE = 6000;
 	
 	private Camera camera;
-	static int bestC = 0;
-	static int bestX = 0;
-	static int bestY = 0;
+	static Bitmap bmp = null;
+	static boolean firing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 //            Log.v("MicInfoService", "amplitude: " + recorder.getMaxAmplitude());
         	if (recorder.getMaxAmplitude() > AMPLITUDE) {
         		Log.v("MicInfoService", "PEW");
-        		mainact.fire();
+        		if(!firing) mainact.fire();
         	}
         }
     }
@@ -84,6 +85,8 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     	
     	recorder.stop();
     	timer.cancel();
+    	
+    	finish();
     }
     
     @Override
@@ -109,6 +112,7 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     
     public void fire()
     {
+    	firing = true;
     	camera.takePicture(null, null, null, this);
     }
     
@@ -126,23 +130,35 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     
     @Override
 	public void onPictureTaken(byte[] picture, Camera camera) {
+    	Log.d("PEWPEWpixel", "Picture taken");
     	
-		Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+    	final int xcenter = 1059;
+		final int ycenter = 564;
+		final int RADIUS = 15;
 		
-		int xcenter = 1059;
-		int ycenter = 564;
+    	try {
+			BitmapRegionDecoder brd = BitmapRegionDecoder.newInstance(picture, 0, picture.length, true);
+			BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inBitmap = bmp;
+			opt.inSampleSize = 1;
+			bmp = brd.decodeRegion(new Rect(xcenter-RADIUS, ycenter-RADIUS, xcenter+RADIUS, ycenter+RADIUS), opt);
+			brd.recycle();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
 		float hsv[] = {0,0,0};
-		final int RADIUS = 50;
 		boolean found = false;
 		
-		for(int x = xcenter-RADIUS; x < xcenter + RADIUS; x++)
+		for(int x = 0; x < bmp.getWidth(); x++)
 		{
-			for(int y = ycenter-RADIUS; y < ycenter + RADIUS; y++)
+			for(int y = 0; y < bmp.getHeight(); y++)
 			{
 				int c = bmp.getPixel(x, y);
 				Color.colorToHSV(c, hsv);
 				
-				if( (hsv[2] > 0.5) && ( (hsv[0] < 30) || (hsv[0] > 300) ) )
+				if( (hsv[2] > 0.5) && (hsv[1] > 0.25) && ( (hsv[0] < 25) || (hsv[0] > 300) ) )
 				{
 					
 					hit();
@@ -166,6 +182,7 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 		}
 		Log.d("PEWPEWpixel", "done");
 		camera.startPreview();
+		firing = false;
 	}
     
     @Override
@@ -174,7 +191,7 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 		
 		if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
 		{
-			fire();
+			if(!firing) fire();
 			return true;
 		}
 		
