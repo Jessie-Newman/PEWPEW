@@ -121,6 +121,8 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
     protected void onResume() {
     	super.onResume();
     	
+    	score = 0;
+    	
     	if (recorder == null) {
     		recorder = setupRecorder();
     	}
