@@ -1,40 +1,44 @@
 package com.example.pewpew;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 public class MainActivity extends Activity {
-//	private AudioRecord audioRecorder;
-//	private boolean isRecording = false;
-//	private int SAMPLE_PER_SEC = 8000;
-//	private int minSize;
 	private MediaRecorder recorder;
 	private Timer timer;
+	
+	private static final int AMPLITUDE = 6000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        		| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.activity_main);
         findViewById(R.id.main).setBackgroundColor(Color.BLACK);
-        
-//        audioRecorder = constructAudioRecorder();
-//        MicThread micThread = new MicThread();
-//        micThread.run();
-        
-        recorder = new MediaRecorder();
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.start();
 
+        recorder = setupRecorder();
         timer = new Timer();
-        timer.scheduleAtFixedRate(new RecorderTask(recorder), 0, 100);
-
+    }
+    
+    private MediaRecorder setupRecorder() {
+    	recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile("/dev/null");
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        return recorder;
     }
     
     private class RecorderTask extends TimerTask {
@@ -45,8 +49,10 @@ public class MainActivity extends Activity {
         }
 
         public void run() {
-            Log.v("MicInfoService", "amplitude: " + recorder.getMaxAmplitude());
-//        	if (recorder.getMaxAmplitude() > recorder.)
+//            Log.v("MicInfoService", "amplitude: " + recorder.getMaxAmplitude());
+        	if (recorder.getMaxAmplitude() > AMPLITUDE) {
+        		Log.v("MicInfoService", "PEW");
+        	}
         }
     }
     
@@ -60,34 +66,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
     	super.onResume();
+    	
+    	if (recorder == null) {
+    		recorder = setupRecorder();
+    	}
+    	
+    	try {
+    		recorder.prepare();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
     	recorder.start();
     	timer.scheduleAtFixedRate(new RecorderTask(recorder), 0, 100);
     }
-    
-    
-
-//    private AudioRecord constructAudioRecorder() {
-//        minSize = AudioRecord.getMinBufferSize(SAMPLE_PER_SEC, 
-//        		AudioFormat.CHANNEL_IN_MONO,             
-//        		AudioFormat.ENCODING_PCM_16BIT);     
-//        AudioRecord audioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_PER_SEC,
-//        		AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, minSize * 10);
-//        audioRecorder.startRecording();
-//        isRecording = true;
-//        return audioRecorder;
-//    }
-//    
-//    private class MicThread implements Runnable {
-//
-//		@Override
-//		public void run() {
-//			while (isRecording && audioRecorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING)
-//	        {
-//	            short recordedData[] = new short[minSize];
-//	            audioRecorder.read(recordedData, 0, recordedData.length); 
-//	            //fun
-//	        }			
-//		}
-//    }
-    
 }
