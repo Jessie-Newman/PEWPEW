@@ -33,7 +33,7 @@ public class MainActivity extends Activity implements PictureCallback, SurfaceHo
 	private MediaRecorder recorder;
 	private Timer timer;
 	
-	private static final int AMPLITUDE = 6500;
+	private static final int AMPLITUDE = 6000;
 	
 	private Camera camera;
 	static Bitmap bmp = null;
